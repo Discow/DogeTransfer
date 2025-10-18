@@ -3,6 +3,38 @@
           xmlns:tools="http://schemas.android.com/tools"
 >
 
+    <!-- WiFi Direct 权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- 位置权限（Android 6.0+需要用于WiFi扫描） -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
+    <!-- Android 13+ 附近WiFi设备权限 -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" 
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="tiramisu" />
+    
+    <!-- 存储权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    
+    <!-- Android 13+ 读取媒体权限 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    
+    <!-- 通知权限 (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-feature android:name="android.hardware.wifi.direct" android:required="true" />
+
     <application
             android:allowBackup="true"
             android:fullBackupContent="@xml/backup_rules"
@@ -11,6 +43,31 @@
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.DogeTransfer"/>
+            android:theme="@style/Theme.DogeTransfer"
+            android:requestLegacyExternalStorage="true"
+            tools:targetApi="31">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <receiver
+                android:name=".wifi.WiFiDirectBroadcastReceiver"
+                android:exported="true" tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.net.wifi.p2p.STATE_CHANGED" />
+                <action android:name="android.net.wifi.p2p.PEERS_CHANGED" />
+                <action android:name="android.net.wifi.p2p.CONNECTION_CHANGED" />
+                <action android:name="android.net.wifi.p2p.THIS_DEVICE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        
+    </application>
 
 </manifest>
